@@ -1,6 +1,8 @@
 # RockwellDBConn
 We needed something to communicate between a SQL Server DB and a Rockwell PLC. This is a test to look at that.
 
+## Python must be installed to use this script
+
 ## Getting Started
 To start, install the following dependencies:
 ```
