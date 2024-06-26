@@ -2,7 +2,7 @@
 We needed something to communicate between a SQL Server DB and a Rockwell PLC. This is a test to look at that.
 
 ## Python must be installed to use this script
-Releases here: https://www.python.org/downloads/windows/
+Releases here: https://www.python.org/downloads/windows/\
 Additionally, Python can be installed through the Microsoft Store.
 
 ## Getting Started
