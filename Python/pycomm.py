@@ -59,7 +59,6 @@ try:
 
         try:
             add_serial_num(cursor, TABLE, testVal)
-
         except Exception as e:
             if '23000' in e.args[0]:
                 print('This value already exists in the database')
@@ -80,5 +79,5 @@ try:
 
 # Catch exception
 except Exception as e:
-    print('Error while connection: ', e)
+    print('Error while connecting: ', e)
 
