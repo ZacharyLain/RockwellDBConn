@@ -1,15 +1,19 @@
+import os
 from pylogix import PLC
 import pyodbc
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Define PLC IP and tag to read
-IP_ADDRESS = '10.0.0.1'
-SERIAL_TAG = 'Tag'
+IP_ADDRESS = os.getenv('IP_ADDR')
+SERIAL_TAG = os.getenv('SERIAL_TAG')
 
 # Define server and db names
-SERVER = 'ZLAIN-Strix\SQLEXPRESS'
-DATABASE = 'PartsDB'
-TABLE = 'Parts'
-SERIAL_COL = 'SerialNum'
+SERVER = os.getenv('SERVER')
+DATABASE = os.getenv('DATABASE')
+TABLE = os.getenv('TABLE')
+SERIAL_COL = os.getenv('SERIAL_COL')
 
 # Set up connection string
 conn_str = (f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={SERVER};DATABASE={DATABASE};Trusted_Connection=yes;')
