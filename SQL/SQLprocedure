@@ -1,6 +1,8 @@
 
 use master;
 
+-- Used to see before the current state of the Serial Numbers in PartsInfo table
+
 select SerialNumber from PartsInfo;
 
 --TRY CATCH
@@ -16,10 +18,15 @@ select SerialNumber from PartsInfo;
 
 -- Notes probably can remove all of the other columns besides just SerialNumber, and maybe DateTime
 BEGIN TRY
+
+-- Select all info from the PartsInfo table to see whats inside
 select * from PartsInfo;
+
+-- Attempt to Insert new information to the table
 INSERT INTO PartsInfo
 	(PartID,SerialNumber,DupeCheck,Building_Location)
 values
+    -- There is already a 'abc201' Serial Number in the table
 	(13,'abc201','0', 'China')
 ;
 END TRY
