@@ -1,21 +1,39 @@
 
 use master;
 
--- Used to see before the current state of the Serial Numbers in PartsInfo table
-
-select SerialNumber from PartsInfo;
-
---TRY CATCH
--- Types of catches 
+-- Create a procedure aka a function
+-- Verify that the stored procedure does not already exist.  
+-- The 'P' is stored procedure, so if this procedure already exists
+-- We drop it, and create a new one
+IF OBJECT_ID ( 'PartsInfo_GetErrorInfo', 'P' ) IS NOT NULL   
+    DROP PROCEDURE usp_GetErrorInfo;  
+GO  
+  
+-- Create procedure to retrieve error information.  
+CREATE PROCEDURE PartsInfo_GetErrorInfo  
+AS  
+SELECT  
+    ERROR_NUMBER() AS ErrorNumber  
+    ,ERROR_SEVERITY() AS ErrorSeverity  
+    ,ERROR_STATE() AS ErrorState  
+    ,ERROR_PROCEDURE() AS ErrorProcedure  
+    ,ERROR_LINE() AS ErrorLine  
+    ,ERROR_MESSAGE() AS ErrorMessage;
 -- ERROR_MESSAGE() - you can take advantage of this function to get the complete error message.
 -- ERROR_LINE() - this function can be used to get the line number on which the error occurred.
 -- ERROR_NUMBER() - this function can be used to get the error number of the error.
 -- ERROR_SEVERITY() - this function can be used to get the severity level of the error.
 -- ERROR_STATE() - this function can be used to get the state number of the error.
 -- ERROR_PROCEDURE() - this function can be used to know the name of the stored procedure or trigger that has caused the error.
+GO  
 
+-- Used to see before the current state of the Serial Numbers in PartsInfo table
+
+select SerialNumber from PartsInfo;
+
+--TRY CATCH
 -- Maybe create a trigger? and have it popup on the screen when their is a repeated SerialNumber
-
+-- Explanation of Try-Catch TSQL https://learn.microsoft.com/en-us/sql/t-sql/language-elements/try-catch-transact-sql?view=sql-server-ver16
 -- Notes probably can remove all of the other columns besides just SerialNumber, and maybe DateTime
 BEGIN TRY
 
@@ -33,7 +51,12 @@ END TRY
 BEGIN CATCH
 -- Display the error on the screen as popup?
 -- Displays as a select statement, but doent crash
+
+--SELECT  
+--    ERROR_MESSAGE() AS ErrorMessage;
 -- this is what it outputs 
 -- Violation of UNIQUE KEY constraint 'UQ__PartsInf__048A0008CE76A2A4'. Cannot insert duplicate key in object 'dbo.PartsInfo'. The duplicate key value is (abc201).
-select ERROR_MESSAGE() as [Error Message]
+
+-- Execute is used to call procedures  
+	EXECUTE PartsInfo_GetErrorInfo
 END CATCH
