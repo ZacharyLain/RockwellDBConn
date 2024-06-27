@@ -1,0 +1,32 @@
+
+use master;
+
+select SerialNumber from PartsInfo;
+
+--TRY CATCH
+-- Types of catches 
+-- ERROR_MESSAGE() - you can take advantage of this function to get the complete error message.
+-- ERROR_LINE() - this function can be used to get the line number on which the error occurred.
+-- ERROR_NUMBER() - this function can be used to get the error number of the error.
+-- ERROR_SEVERITY() - this function can be used to get the severity level of the error.
+-- ERROR_STATE() - this function can be used to get the state number of the error.
+-- ERROR_PROCEDURE() - this function can be used to know the name of the stored procedure or trigger that has caused the error.
+
+-- Maybe create a trigger? and have it popup on the screen when their is a repeated SerialNumber
+
+-- Notes probably can remove all of the other columns besides just SerialNumber, and maybe DateTime
+BEGIN TRY
+select * from PartsInfo;
+INSERT INTO PartsInfo
+	(PartID,SerialNumber,DupeCheck,Building_Location)
+values
+	(13,'abc201','0', 'China')
+;
+END TRY
+BEGIN CATCH
+-- Display the error on the screen as popup?
+-- Displays as a select statement, but doent crash
+-- this is what it outputs 
+-- Violation of UNIQUE KEY constraint 'UQ__PartsInf__048A0008CE76A2A4'. Cannot insert duplicate key in object 'dbo.PartsInfo'. The duplicate key value is (abc201).
+select ERROR_MESSAGE() as [Error Message]
+END CATCH
