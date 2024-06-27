@@ -27,8 +27,8 @@ def serial_num_exists(cursor, tableName, columnName, value):
     return cursor.fetchone() is not None
 
 def add_serial_num(cursor, tableName, value):
-    query = f'INSERT INTO ? (SerialNumber) VALUES (\'?\')'
-    cursor.execute(query, tableName, value)
+    query = f'INSERT INTO {tableName} (SerialNumber) VALUES (?)'
+    cursor.execute(query, value)
 
 try:
     # Start communication with DB
@@ -43,16 +43,26 @@ try:
     # Make a cursor to use cursor methods
     cursor = conn.cursor()
 
-    while True:
-        tag.Value = input('New serial num: ')
+    selectAll(cursor, TABLE)
 
-        if (serial_num_exists(cursor, TABLE, SERIAL_COL, tag.Value)):
-            print('ERROR: Serial number has already been used.')
-        else:
-            if (tag.Value != '0'):
-                add_serial_num(cursor, TABLE, tag.Value)
+    while True:
+        testVal = input('New serial num: ')
+
+        try:
+            add_serial_num(cursor, TABLE, testVal)
+        except Exception as e:
+            if '23000' in e.args[0]:
+                print('This value already exists in the database')
             else:
-                break
+                print('The error is not related to the value being in the table')
+
+        # if (serial_num_exists(cursor, TABLE, SERIAL_COL, tag.Value)):
+        #     print('ERROR: Serial number has already been used.')
+        # else:
+        #     if (tag.Value != '0'):
+        #         add_serial_num(cursor, TABLE, tag.Value)
+        #     else:
+        #         break
 
     # Close PLC communication and DB connection
     plc.Close()
