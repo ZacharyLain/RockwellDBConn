@@ -52,6 +52,9 @@ public class ODBCTest
             connection.Open();
             command.ExecuteNonQuery();
 
+            // commit to the db
+            CommitInsertion(connectionString);
+
             // The connection is automatically closed at
             // the end of the Using block.
         }
