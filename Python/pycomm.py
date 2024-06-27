@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Define PLC IP and tag to read
-IP_ADDRESS = os.getenv('IP_ADDR')
+IP_ADDRESS = os.getenv('IP_ADDRESS')
 SERIAL_TAG = os.getenv('SERIAL_TAG')
 
 # Define server and db names
@@ -30,9 +30,14 @@ def serial_num_exists(cursor, tableName, columnName, value):
     cursor.execute(query, tableName, columnName, value)
     return cursor.fetchone() is not None
 
+def commit_insertion(cursor):
+    query = 'COMMIT'
+    cursor.execute(query)
+
 def add_serial_num(cursor, tableName, value):
     query = f'INSERT INTO {tableName} (SerialNumber) VALUES (?)'
     cursor.execute(query, value)
+    commit_insertion(cursor)
 
 try:
     # Start communication with DB
@@ -54,11 +59,12 @@ try:
 
         try:
             add_serial_num(cursor, TABLE, testVal)
+
         except Exception as e:
             if '23000' in e.args[0]:
                 print('This value already exists in the database')
             else:
-                print('The error is not related to the value being in the table')
+                print('The error is not related to the value being in the table\nException: {e}')
 
         # if (serial_num_exists(cursor, TABLE, SERIAL_COL, tag.Value)):
         #     print('ERROR: Serial number has already been used.')
