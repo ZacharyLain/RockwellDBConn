@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.Odbc;
-using System.Net.Security;
-using DotNetEnv;
+// using System.Net.Security;
+// using DotNetEnv;
 
 
 namespace dotnetdb
@@ -15,25 +15,25 @@ namespace dotnetdb
             // START ENV DEBUG SECTION
 
             // Specify the path to the .env file
-            string envFilePath = @"../../../../../.env";
+            //string envFilePath = @"../../../../../.env";
 
-            Env.Load(envFilePath);
+            //Env.Load(envFilePath);
 
             // Retrieve the environment variables
-            string server = Environment.GetEnvironmentVariable("SERVER");
-            string database = Environment.GetEnvironmentVariable("DATABASE");
-            string serialTag = Environment.GetEnvironmentVariable("SERIAL_TAG");
-            string table = Environment.GetEnvironmentVariable("TABLE");
-            string serialCol = Environment.GetEnvironmentVariable("SERIAL_COL");
-            string ipAddress = Environment.GetEnvironmentVariable("IP_ADDRESS");
+            string server = ("(local)\\Testing");
+            string database = ("SNTesting");
+            //string serialTag = Environment.GetEnvironmentVariable("SERIAL_TAG");
+            string table = ("PartsInfo");
+            //string serialCol = Environment.GetEnvironmentVariable("SERIAL_COL");
+            //string ipAddress = Environment.GetEnvironmentVariable("IP_ADDRESS");
 
             // Use the environment variables
             Console.WriteLine($"Server: {server}");
             Console.WriteLine($"Database: {database}");
-            Console.WriteLine($"Serial Tag: {serialTag}");
+            //Console.WriteLine($"Serial Tag: {serialTag}");
             Console.WriteLine($"Table: {table}");
-            Console.WriteLine($"Serial Column: {serialCol}");
-            Console.WriteLine($"IP Address: {ipAddress}");
+            //Console.WriteLine($"Serial Column: {serialCol}");
+            //Console.WriteLine($"IP Address: {ipAddress}");
 
             // END ENV DEBUG SECTION
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -41,10 +41,12 @@ namespace dotnetdb
 
             // Set up string for connection
             string connectionString = $"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;";
-            string serialNum = "";
+            //string serialNum = "";
+
+            int serialNum = 30000;
 
             // just loop this thing forever
-            while (true)
+            while (serialNum < 60000)
             {
                 // This will become a read from the PLC serial number tag
                 Console.WriteLine("New serial num: ");
@@ -82,6 +84,8 @@ namespace dotnetdb
                 {
                     Console.WriteLine($"Exception occurred: {ex.Message}");
                 }
+
+                serialNum++;
             }
         }
 
@@ -92,7 +96,7 @@ namespace dotnetdb
             OdbcCommand command = new OdbcCommand();
 
             // prepared query with placeholder
-            string queryString = "INSERT INTO Parts (SerialNumber) VALUES (?)";
+            string queryString = $"INSERT INTO {table} (SerialNumber) VALUES (?)";
 
             // set the command text and connection for the command
             command.CommandText = queryString;
